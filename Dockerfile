@@ -13,8 +13,8 @@ RUN apt-get update
 RUN apt-get install -y nodejs
 RUN npm update -g npm
 WORKDIR /opt
-RUN git clone https://github.com/ottemo/store-ng.git -b develop /opt/storefront
-WORKDIR /opt/storefront
+RUN git clone https://github.com/ottemo/store-ng.git -b develop /opt/store-ng
+WORKDIR /opt/store-ng
 RUN npm install
 RUN npm install -g bower
 RUN bower install --allow-root
