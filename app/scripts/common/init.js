@@ -34,7 +34,7 @@
             /**
              *  Basic routing configuration
              */
-                .config(["$routeProvider", function ($routeProvider) {
+                .config(["$routeProvider", "$locationProvider", function ($routeProvider, $locationProvider) {
                     $routeProvider
                         .when("/", {
                             templateUrl: angular.getTheme("common/home.html"),
@@ -59,7 +59,7 @@
                                 return deferControllerValue;
                             }
                         });
-
+                    $locationProvider.html5Mode(true);
                 }])
 
                 .run([
@@ -156,7 +156,7 @@
                                 };
 
                                 $http({
-                                    url: REST_SERVER_URI + "/url_rewrite/get" + $location.$$path,
+                                    url: REST_SERVER_URI + "/seo/url/" + $location.$$path,
                                     method: "GET"
                                 }).success(successFunction).error(errorFunction);
                             }

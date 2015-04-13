@@ -49,7 +49,7 @@
                     }
 
                     if ($scope.orderId) {
-                        $visitorApiService.getOrder({"id": $scope.orderId}).$promise.then(
+                        $visitorApiService.getOrder({"orderID": $scope.orderId}).$promise.then(
                             function (response) {
                                 $scope.order = response.result || [];
                                 $scope.$emit('add-breadcrumbs', {'label': $scope.order["increment_id"], 'url': '/account/order/' + $scope.orderId});
@@ -61,7 +61,7 @@
                     $scope.getDateCreated = function (str) {
                         var date, month, day;
 
-                        date = new Date(str);
+                        date = $commonUtilService.getDate(str);
                         var m = date.getMonth() + 1;
                         month = m.toString().length < 2 ? '0' + m : m;
                         day = date.getDate().toString().length < 2 ? '0' + date.getDate() : date.getDate();
@@ -72,7 +72,7 @@
                     $scope.$watch('addedOrderId', function () {
                         if (typeof $scope.addedOrderId !== 'undefined') {
                             $scope.message = $commonUtilService.getMessage(null, "success", "THANK YOU FOR YOUR PURCHASE!<br/>" +
-                                    "Your order # is: <a href=\"#/account/order/" + $scope.addedOrderId + "\">" + $scope.addedOrderId + "</a>"
+                                    "Your order # is: <a href=\"/account/order/" + $scope.addedOrderId + "\">" + $scope.addedOrderId + "</a>"
                             );
                         }
                     });

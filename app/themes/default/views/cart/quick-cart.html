@@ -59,13 +59,13 @@
                                     <div class="col-lg-6">
                                         <div class="input-group" style="width:150px;">
                                             <span class="input-group-btn">
-                                                <button class="btn btn-primary" type="button" ng-click="changeQty(item,'up')"  ng-blur="update(item.idx, item.qty)">
+                                                <button class="btn btn-primary" type="button" ng-click="changeQty(item,'up');update(item.idx, item.qty)">
                                                     +
                                                 </button>
                                             </span>
-                                            <input type="text" class="form-control text-center" value="{{item.qty}}" ng-model="item.qty">
+                                            <input type="text" class="form-control text-center" value="{{item.qty}}" ng-model="item.qty" ng-change="update(item.idx, item.qty)">
                                             <span class="input-group-btn">
-                                                <button class="btn btn-primary" type="button" ng-click="changeQty(item,'down')"  ng-blur="update(item.idx, item.qty)">
+                                                <button class="btn btn-primary" type="button" ng-click="changeQty(item,'down');update(item.idx, item.qty)">
                                                     -
                                                 </button>
                                             </span>
@@ -82,7 +82,7 @@
                         </tr> 
                     </table>
                     <div class="text-center" ng-if="$last && (it.getCountItems() > it.getItemsForMiniCart().length)">
-                        <a href="#/cart" class="total">
+                        <a href="/cart" class="total">
                             <strong>{{it.getCountItems() - 3}} items more...</strong>
                         </a>
                     </div>
@@ -101,7 +101,7 @@
                 <a href="{{checkout.getUrl()}}" target="_self" class="right">
                     <button type="button" class="btn btn-default">Checkout</button>
                 </a>
-                <a href="#/cart" target="_self" class="btn btn-primary">
+                <a href="/cart" target="_self" class="btn btn-primary">
                    View cart
                 </a>
             </div>

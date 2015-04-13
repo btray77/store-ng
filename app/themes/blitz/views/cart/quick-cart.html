@@ -42,14 +42,14 @@
             <div class="qty">
                 <div class="input-group">
                     <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" ng-click="changeQty(item,'up')" ng-blur="update(item.idx, item.qty)">
+                        <button class="btn btn-default" type="button" ng-click="changeQty(item,'up');update(item.idx, item.qty)">
                             +
                         </button>
                     </span>
                     <input placeholder="Qtl" type="text" class="form-control text-center" value="{{item.qty}}"
-                                           ng-model="item.qty" ng-blur="update(item.idx, item.qty)">
+                                           ng-model="item.qty" ng-change="update(item.idx, item.qty)">
                     <span class="input-group-btn">
-                        <button class="btn btn-default" type="button"  ng-click="changeQty(item,'down')" ng-blur="update(item.idx, item.qty)">
+                        <button class="btn btn-default" type="button"  ng-click="changeQty(item,'down');update(item.idx, item.qty)">
                             -
                         </button>
                     </span>
@@ -81,7 +81,7 @@
             <br>
 
             <div class="text-center">
-                <a class="btn btn-lg btn-info btn-block hidden-xs" href="#/cart">&nbsp;View Cart&nbsp;</a>
+                <a class="btn btn-lg btn-info btn-block hidden-xs" href="/cart">&nbsp;View Cart&nbsp;</a>
                 <a class="btn btn-lg btn-danger btn-block" href="{{checkout.getUrl()}}">&nbsp;&nbsp;Checkout&nbsp;&nbsp;</a>
             </div>
             <br>

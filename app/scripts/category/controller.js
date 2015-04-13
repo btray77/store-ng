@@ -215,13 +215,15 @@
                      */
                     $scope.getCountProduct = function () {
                         if ($scope.isShop) {
-                            $categoryApiService.getShopCountProducts(getParams(true), {}).$promise.then(function (response) {
+                            $categoryApiService.getShopCountProducts(getParams(true)).$promise.then(function (response) {
                                 var result = response.result || [];
                                 $scope.totalItems = result;
                                 $scope.pages = Math.ceil($scope.totalItems / $scope.itemsPerPage);
                             });
                         } else {
-                            $categoryApiService.getCountProducts(getParams(true), {"id": $scope.categoryId}).$promise.then(function (response) {
+                            var params = getParams(true);
+                            params["categoryID"] = $scope.categoryId;
+                            $categoryApiService.getCountProducts(params).$promise.then(function (response) {
                                 var result = response.result || [];
                                 $scope.totalItems = result;
                                 $scope.pages = Math.ceil($scope.totalItems / $scope.itemsPerPage);
@@ -240,7 +242,9 @@
                                 $scope.productsList = result;
                             });
                         } else {
-                            $categoryApiService.getProductsByCategoryId(getParams(), {"id": $scope.categoryId}).$promise.then(function (response) {
+                            var params = getParams();
+                            params["categoryID"] = $scope.categoryId;
+                            $categoryApiService.getProductsByCategoryId(params).$promise.then(function (response) {
                                 var result = response.result || [];
                                 $scope.productsList = result;
                             });
@@ -264,9 +268,9 @@
                                 }
                             );
                         } else {
-                            $categoryApiService.getLayered($location.search(), {
-                                "id": $scope.categoryId
-                            }).$promise.then(function (response) {
+                            var params = $location.search();
+                            params["categoryID"] = $scope.categoryId;
+                            $categoryApiService.getLayered(params).$promise.then(function (response) {
                                     var result = response.result || [];
                                     $scope.layered = result;
                                     for (var filter in $scope.layered) {
@@ -304,6 +308,7 @@
                             $categoryApiService.load({"id": $scope.categoryId}).$promise.then(function (response) {
                                 var result = response.result || [];
                                 $scope.category = result;
+                                $scope.initCategoryImages();
                             });
                         }
 
@@ -387,6 +392,33 @@
                         return $designImageService.getFullImagePath("", product["default_image"], size);
                     };
 
+                    /**
+                     * Set category image and images attributes value as a path
+                     * $scope.category.image - default image path
+                     * $scope.category.images - list of all images in this category
+                     */
+                    $scope.initCategoryImages = function () {
+                        var categoryImageBasePath;
+
+                        $categoryApiService.getImagePath({"categoryID": $scope.categoryId}).$promise.then(function (response) {
+                            categoryImageBasePath = response.result || [];
+                        });
+
+                        $categoryApiService.listImages({"categoryID": $scope.categoryId}).$promise.then(function (response) {
+                            $scope.category.images = response.result || [];
+                            var categoryImagesPath = {};
+                            for (var i=0, imageName, imagePath; i < $scope.category.images.length; i+=1) {
+                                imageName = $scope.category.images[i];
+                                imagePath = $designImageService.getFullImagePath("", categoryImageBasePath + imageName);
+                                categoryImagesPath[imageName] = imagePath;
+                            }
+                            $scope.category.images = categoryImagesPath;
+                            if (typeof $scope.category.image !== "undefined") {
+                                $scope.category.image = $designImageService.getFullImagePath("", categoryImageBasePath + $scope.category.image);
+                            }
+                        });
+                    };
+
                     $scope.sortByPrice = function (order) {
                         var orderStr;
 
@@ -443,19 +475,23 @@
                     $scope.loadMore = function () {
                         $scope.clickMore = true;
                         $scope.currentPage += 1;
-                        $categoryApiService.getProductsByCategoryId(getParams(), {"id": $scope.categoryId}).$promise.then(
+
+                        var params = getParams();
+                        params["categoryID"] = $scope.categoryId;
+
+                        $categoryApiService.getProductsByCategoryId(params).$promise.then(
                             function (response) {
                                 var result = response.result || [];
                                 $scope.productsList = $scope.productsList.concat(result);
                             }
                         );
                         if ($scope.isShop) {
-                            $categoryApiService.getShopProducts(getParams(), {}).$promise.then(function (response) {
+                            $categoryApiService.getShopProducts(params).$promise.then(function (response) {
                                 var result = response.result || [];
                                 $scope.productsList = $scope.productsList.concat(result);
                             });
                         } else {
-                            $categoryApiService.getProductsByCategoryId(getParams(), {"id": $scope.categoryId}).$promise.then(
+                            $categoryApiService.getProductsByCategoryId(params).$promise.then(
                                 function (response) {
                                     var result = response.result || [];
                                     $scope.productsList = $scope.productsList.concat(result);
